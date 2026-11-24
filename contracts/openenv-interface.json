@@ -1,0 +1,22 @@
+{
+  "$comment": "The JSONL protocol of gym_runtime.stdio_server. Gymnasium-style; not an OpenEnv HTTP server.",
+  "transport": "one JSON object per line on stdin, one per line on stdout",
+  "start": "python3 -m gym_runtime.stdio_server SCENARIO.json [--seed N] [--cause-file PATH] [--max-steps N]",
+  "requests": {
+    "reset": {"op": "reset", "seed": "integer, optional", "episode_id": "string, optional"},
+    "step": {"op": "step", "action": {"type": "observe | answer | abstain", "name": "probe name (observe)",
+                                       "hypothesis": "cause name (answer)"}},
+    "state": {"op": "state"}
+  },
+  "responses": {
+    "reset": {"observation": "object", "info": {"status": "ready", "max_steps": "integer"}, "reward": 0.0,
+              "terminated": false, "truncated": false},
+    "step": {"observation": "object", "reward": "number", "terminated": "boolean", "truncated": "boolean",
+             "info": {"outcome": "on the last step: justified_correct | lucky_correct | wrong | invalid | abstain_not_observable | abstain_premature | truncated",
+                      "consistent_hypotheses": "on the last step", "measurement": "after observe", "error": "on a bad request"}},
+    "state": {"episode_id": "string or null", "step_count": "integer", "done": "boolean", "observation": "object"},
+    "error": {"error": "string"}
+  },
+  "observation": {"hypotheses": ["string"], "probes": [{"name": "string", "cost": "integer", "readings": {"cause": ["value"]}}],
+                  "budget": "integer", "remaining_budget": "integer", "history": [{"probe": "string", "value": "any", "cost": "integer"}]}
+}

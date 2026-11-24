@@ -1,0 +1,199 @@
+{
+ "kernel_release": "7.1.4",
+ "machine": "x86_64",
+ "rows": [
+  {
+   "candidate": "reference",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 2,
+   "should_allow": 2,
+   "wrongly_allowed": 0,
+   "wrongly_denied": 0,
+   "example": null
+  },
+  {
+   "candidate": "starter",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 5,
+   "should_allow": 2,
+   "wrongly_allowed": 3,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.8",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "m01-uid-bypass.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 5,
+   "should_allow": 2,
+   "wrongly_allowed": 3,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10043,
+    "ip": "10.4.2.9",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "m02-protocol-bypass.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 3,
+   "should_allow": 2,
+   "wrongly_allowed": 1,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.9",
+    "port": 443,
+    "proto": 17,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "m03-baseline-drop.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 1,
+   "should_allow": 2,
+   "wrongly_allowed": 0,
+   "wrongly_denied": 1,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.53",
+    "port": 53,
+    "proto": 17,
+    "contract": 1,
+    "kernel": 0
+   }
+  },
+  {
+   "candidate": "m04-cidr-widening.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 5,
+   "should_allow": 2,
+   "wrongly_allowed": 3,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.8",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "m05-proto-truncation.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 2,
+   "should_allow": 2,
+   "wrongly_allowed": 0,
+   "wrongly_denied": 0,
+   "example": null
+  },
+  {
+   "candidate": "m06-uid-truncation.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 3,
+   "should_allow": 2,
+   "wrongly_allowed": 1,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 75578,
+    "ip": "10.4.2.9",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "m07-ip-high-byte-mask.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 3,
+   "should_allow": 2,
+   "wrongly_allowed": 1,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "11.4.2.9",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "x01-ifdef-bpf-allow-all.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 192,
+   "should_allow": 2,
+   "wrongly_allowed": 190,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.9",
+    "port": 443,
+    "proto": 17,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "x02-atexit-reward-overwrite.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 5,
+   "should_allow": 2,
+   "wrongly_allowed": 3,
+   "wrongly_denied": 0,
+   "example": {
+    "uid": 10042,
+    "ip": "10.4.2.8",
+    "port": 443,
+    "proto": 6,
+    "contract": 0,
+    "kernel": 1
+   }
+  },
+  {
+   "candidate": "x03-magic-backdoor.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 2,
+   "should_allow": 2,
+   "wrongly_allowed": 0,
+   "wrongly_denied": 0,
+   "example": null
+  },
+  {
+   "candidate": "x04-time-bomb.c",
+   "loaded": true,
+   "connects": 192,
+   "allowed": 2,
+   "should_allow": 2,
+   "wrongly_allowed": 0,
+   "wrongly_denied": 0,
+   "example": null
+  }
+ ]
+}

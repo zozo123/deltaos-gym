@@ -1,0 +1,33 @@
+schema_version = "1.4"
+artifacts = ["/workspace/policy.c"]
+
+[task]
+name = "deltaos/egress-policy-delta"
+version = "1.0.0"
+description = "Repair a cgroup BPF authorization policy with no unintended egress changes."
+keywords = ["linux", "ebpf", "verified-change", "systems", "kernel"]
+
+[metadata]
+difficulty = "medium"
+category = "systems"
+tags = ["ebpf", "behavioral-delta", "model-checking", "kernel-tier"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[verifier.environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+workdir = "/workspace"

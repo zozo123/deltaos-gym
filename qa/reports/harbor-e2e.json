@@ -1,0 +1,68 @@
+{
+ "harbor_version": "0.27.0",
+ "lint_exit": 0,
+ "lint_findings": "",
+ "note": "Each trial ran with a separate verifier container built from tests/Dockerfile. This machine's kernel lacks CONFIG_NFT_FIB_INET, so Harbor's Docker backend cannot enforce network_mode = \"no-network\"; the trials ran on copies of the tasks with network_mode = \"public\".",
+ "tasks": [
+  {
+   "task": "egress-policy-delta",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "PROVED_WITHIN_MODEL",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  },
+  {
+   "task": "fd-capability-boundary",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "TESTED",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  },
+  {
+   "task": "probe-design",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "TESTED",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "PROVED_WITHIN_MODEL",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  },
+  {
+   "task": "upatch-rpl-predicate",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "PROVED_WITHIN_MODEL",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "oracle_reward": 1.0,
+   "oracle_errors": 0,
+   "oracle_assurance": "MODEL_CHECKED",
+   "oracle_isolation": "uid-separated",
+   "nop_reward": 0.0,
+   "nop_errors": 0,
+   "nop_assurance": "REFUTED"
+  }
+ ]
+}

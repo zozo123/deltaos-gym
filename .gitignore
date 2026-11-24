@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.o
+*.so
+/dist/
+/site/draft.html

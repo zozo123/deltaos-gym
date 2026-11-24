@@ -1,0 +1,11 @@
+# Dev/QA image for DeltaOS Gym: every tool any grader tier can use.
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive TZ=UTC
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates gcc libc6-dev make binutils clang llvm lld \
+      libbpf-dev linux-libc-dev libelf-dev zlib1g-dev \
+      cbmc z3 python3 python3-venv \
+      iproute2 iputils-ping procps strace file jq git curl xz-utils zip unzip \
+    && rm -rf /var/lib/apt/lists/*
+RUN id nobody && mkdir -p /work
+WORKDIR /work

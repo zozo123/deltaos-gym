@@ -1,0 +1,33 @@
+schema_version = "1.4"
+artifacts = ["/workspace/rpl_predicate.c"]
+
+[task]
+name = "deltaos/upatch-rpl-predicate"
+version = "1.0.0"
+description = "Write the predicate of a BPF detector for a kernel bug, from the upstream fix, with proof and in-kernel evidence."
+keywords = ["linux", "ebpf", "fentry", "shirudo", "upatch", "live-patching", "cve"]
+
+[metadata]
+difficulty = "easy"
+category = "systems"
+tags = ["ebpf", "kernel-cve", "model-checking", "kernel-tier", "shirudo"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[verifier.environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+workdir = "/workspace"

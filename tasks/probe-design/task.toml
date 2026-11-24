@@ -1,0 +1,33 @@
+schema_version = "1.4"
+artifacts = ["/workspace/solver.py"]
+
+[task]
+name = "deltaos/probe-design"
+version = "1.0.0"
+description = "Choose the cheapest set of probes that tells every pair of possible root causes apart."
+keywords = ["observability", "ebpf", "active-diagnosis", "optimization", "experiment-design"]
+
+[metadata]
+difficulty = "medium"
+category = "systems"
+tags = ["observability", "partial-observability", "exact-oracle"]
+
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+
+[verifier.environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 4096
+storage_mb = 1024
+
+[agent]
+timeout_sec = 2700.0
+
+[environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 2048
+storage_mb = 1024
+workdir = "/workspace"

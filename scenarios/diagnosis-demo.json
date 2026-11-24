@@ -1,0 +1,11 @@
+{
+  "hypotheses": ["python-backpressure", "fd-leak", "vfs-stall", "scheduler-starvation"],
+  "budget": 10,
+  "probes": [
+    {"name":"python-asyncio-tasks", "cost":1, "readings":{"python-backpressure":["wait"],"fd-leak":["ready"],"vfs-stall":["wait"],"scheduler-starvation":["wait"]}},
+    {"name":"proc-fd-inventory", "cost":2, "readings":{"python-backpressure":["stable"],"fd-leak":["growing"],"vfs-stall":["stable"],"scheduler-starvation":["stable"]}},
+    {"name":"ebpf-sched-switch", "cost":3, "readings":{"python-backpressure":["normal"],"fd-leak":["normal"],"vfs-stall":["normal"],"scheduler-starvation":["starved"]}},
+    {"name":"vfs-fsync-latency", "cost":2, "readings":{"python-backpressure":["normal"],"fd-leak":["normal"],"vfs-stall":["high"],"scheduler-starvation":["normal"]}},
+    {"name":"syscall-latency", "cost":4, "readings":{"python-backpressure":["fast","slow"],"fd-leak":["fast","slow"],"vfs-stall":["slow"],"scheduler-starvation":["slow"]}}
+  ]
+}

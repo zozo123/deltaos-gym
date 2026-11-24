@@ -1,0 +1,359 @@
+{
+ "what": "Every negative control graded by the ORIGINAL v0.5 graders, each in a fresh container laid out like a Harbor verifier (/workspace, /tests, /logs/verifier). The reward is the content of reward.txt 0.6 s after test.sh returned.",
+ "how": "scripts/legacy_escape_matrix.sh on Linux 7.1.4 x86_64, Ubuntu 24.04 image, gcc 13.3, clang 18.1.3",
+ "date": "2026-11-24",
+ "summary": {
+  "shipped_mutants_rejected": 20,
+  "shipped_mutants_total": 20,
+  "new_wrong_candidates_accepted": 27,
+  "new_wrong_candidates_total": 27,
+  "honest_mistakes_accepted": 14,
+  "honest_mistakes_total": 14,
+  "exploits_accepted": 13,
+  "exploits_total": 13
+ },
+ "rows": [
+  {
+   "task": "egress-policy-delta",
+   "candidate": "ORACLE",
+   "kind": "reference",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "STARTER",
+   "kind": "starter",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m01-uid-bypass.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m02-protocol-bypass.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m03-baseline-drop.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m04-cidr-widening.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m05-proto-truncation.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m06-uid-truncation.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "m07-ip-high-byte-mask.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "x01-ifdef-bpf-allow-all.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "x02-atexit-reward-overwrite.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "x03-magic-backdoor.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "egress-policy-delta",
+   "candidate": "x04-time-bomb.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "ORACLE",
+   "kind": "reference",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "STARTER",
+   "kind": "starter",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "m01-total-wrap.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "m02-amount-narrowing.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "m03-partial-mutation.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "m04-zero-rejected.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "x01-ifdef-bpf-free-quota.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "x02-exit-after-forged-reward.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "x03-magic-amount-backdoor.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "quota-overflow-preservation",
+   "candidate": "x04-time-bomb.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "ORACLE",
+   "kind": "reference",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "STARTER",
+   "kind": "starter",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m01-no-file-fsync.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m02-no-directory-fsync.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m03-skip-partial-write.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m04-return-success-on-fsync-failure.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m05-fsync-after-close.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m06-fsync-retry-after-eio.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m07-eintr-restart-from-zero.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m08-eintr-retried-once.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m09-dir-fsync-retry.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "m10-remove-recreate-empty.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "vfs-crash-atomicity",
+   "candidate": "x01-stdout-forge.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "probe-design",
+   "candidate": "ORACLE",
+   "kind": "reference",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "probe-design",
+   "candidate": "STARTER",
+   "kind": "starter",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "probe-design",
+   "candidate": "m01-select-everything.py",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "probe-design",
+   "candidate": "m02-greedy-first.py",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "probe-design",
+   "candidate": "m03-ignore-nondeterminism.py",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "probe-design",
+   "candidate": "m04-ignore-cost.py",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "probe-design",
+   "candidate": "x01-import-oracle.py",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "probe-design",
+   "candidate": "x02-reward-daemon.py",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "ORACLE",
+   "kind": "reference",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "STARTER",
+   "kind": "starter",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m01-return-success.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m02-leak-other-fds.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m03-break-cloexec.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m04-wrong-target-fd.c",
+   "kind": "shipped mutant",
+   "v0.5_reward": 0
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m05-ignore-authorized-fd.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m06-ignore-exit-status.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m07-no-eintr-retry.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m08-parent-dup2-clobber.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "m09-leak-high-fd.c",
+   "kind": "honest mistake",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "x01-forge-receipt.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  },
+  {
+   "task": "fd-capability-boundary",
+   "candidate": "x02-stdout-forge.c",
+   "kind": "exploit",
+   "v0.5_reward": 1
+  }
+ ]
+}

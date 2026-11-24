@@ -1,0 +1,32 @@
+name: release QA
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    # A GitHub-hosted runner is a VM that is thrown away after the job, which is
+    # what the kernel tier asks for: it loads candidate BPF into the running kernel.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the QA image
+        run: docker build -t deltaos-dev -f qa/Dockerfile.dev qa
+      - name: Release QA, kernel tier on, 3 fresh seeds per candidate
+        run: |
+          docker run --rm --privileged -v "$PWD":/gym -w /gym deltaos-dev \
+            python3 scripts/release_qa.py --seeds 3 --kernel --out /gym/qa/reports/ci-report.json
+      - name: Site builds from the committed reports
+        run: python3 scripts/build_site.py && git diff --stat -- docs/index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-report
+          path: qa/reports/ci-report.json

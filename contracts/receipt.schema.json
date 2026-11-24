@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zozo123.github.io/deltaos-gym/contracts/receipt.schema.json",
+  "title": "DeltaOS grading receipt",
+  "description": "What one grading run established about one artifact, claim by claim. 'assurance' is a one-word summary; 'evidence' is the statement.",
+  "type": "object",
+  "required": ["schema", "task_id", "episode_id", "reward", "passed", "assurance", "evidence", "checks",
+               "artifact_sha256", "artifacts", "seed", "grader", "isolation", "environment", "degraded",
+               "counterexample", "error", "runtime_ms"],
+  "properties": {
+    "schema": {"const": "deltaos.receipt/1"},
+    "task_id": {"type": "string", "pattern": "^deltaos/[a-z0-9-]+$"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "reward": {"type": "integer", "minimum": 0, "maximum": 1},
+    "passed": {"type": "boolean"},
+    "assurance": {"enum": ["COMPILED", "KERNEL_ACCEPTED", "TESTED", "MODEL_CHECKED", "PROVED_WITHIN_MODEL",
+                           "REFUTED", "UNKNOWN"]},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["class", "claim", "status", "scope"],
+        "properties": {
+          "class": {"enum": ["COMPILED", "KERNEL_ACCEPTED", "TESTED", "MODEL_CHECKED", "PROVED_WITHIN_MODEL"]},
+          "claim": {"type": "string", "minLength": 1},
+          "status": {"enum": ["pass", "fail", "not_run"]},
+          "scope": {"type": "string"},
+          "detail": {"type": "object"}
+        }
+      }
+    },
+    "checks": {"type": "object"},
+    "artifact_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "seed": {"type": "string", "minLength": 1},
+    "grader": {
+      "type": "object",
+      "required": ["harness", "model", "sha256"],
+      "properties": {
+        "harness": {"type": "string"},
+        "model": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {"mode": {"enum": ["uid-separated", "same-uid"]}}
+    },
+    "environment": {
+      "type": "object",
+      "required": ["kernel_release", "machine", "python"],
+      "properties": {
+        "kernel_release": {"type": "string"},
+        "machine": {"type": "string"},
+        "python": {"type": "string"}
+      }
+    },
+    "degraded": {"type": "boolean"},
+    "counterexample": {"type": ["object", "null"]},
+    "error": {"type": ["string", "null"]},
+    "kernel_profile": {"type": ["string", "null"]},
+    "runtime_ms": {"type": "integer", "minimum": 0},
+    "trace_uri": {"type": ["string", "null"]}
+  }
+}

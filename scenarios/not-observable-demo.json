@@ -1,0 +1,9 @@
+{
+  "hypotheses": ["page-cache-thrash", "slow-disk", "fd-leak"],
+  "budget": 8,
+  "probes": [
+    {"name": "proc-fd-inventory", "cost": 2, "readings": {"page-cache-thrash": ["stable"], "slow-disk": ["stable"], "fd-leak": ["growing"]}},
+    {"name": "vfs-read-latency", "cost": 3, "readings": {"page-cache-thrash": ["high"], "slow-disk": ["high"], "fd-leak": ["normal"]}},
+    {"name": "psi-io", "cost": 2, "readings": {"page-cache-thrash": ["some", "full"], "slow-disk": ["some", "full"], "fd-leak": ["none"]}}
+  ]
+}

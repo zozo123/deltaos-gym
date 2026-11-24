@@ -1,0 +1,1884 @@
+{
+ "release": "1.0.0",
+ "generated_utc": "2026-11-24T14:09:06Z",
+ "passed": true,
+ "scope": "graders run on shipped references, starters and controls; no model-written code involved",
+ "environment": {
+  "version": "1.0.0",
+  "gcc": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "clang": "Ubuntu clang version 18.1.3 (1ubuntu1)",
+  "cbmc": "5.95.1 (cbmc-5.95.1)",
+  "kernel_release": "7.1.4",
+  "machine": "x86_64",
+  "python": "3.12.3",
+  "root": true,
+  "kernel_tier": "required"
+ },
+ "seeds_per_candidate": 5,
+ "static_checks_ok": true,
+ "unit_tests": [
+  {
+   "suite": "harness/tests",
+   "ran": 21,
+   "skipped": 0,
+   "ok": true,
+   "tail": ""
+  },
+  {
+   "suite": "gym_runtime/tests",
+   "ran": 23,
+   "skipped": 0,
+   "ok": true,
+   "tail": ""
+  },
+  {
+   "suite": "instrumentation/tests",
+   "ran": 4,
+   "skipped": 0,
+   "ok": true,
+   "tail": ""
+  }
+ ],
+ "totals": {
+  "tasks": 6,
+  "episodes": 470,
+  "correct_accepted": 115,
+  "correct_total": 115,
+  "wrong_rejected": 355,
+  "wrong_total": 355,
+  "negative_controls": 65,
+  "positive_controls": 17,
+  "receipts_valid": 470
+ },
+ "tasks": {
+  "egress-policy-delta": {
+   "episodes": 100,
+   "correct_accepted": 20,
+   "correct_total": 20,
+   "wrong_rejected": 80,
+   "wrong_total": 80,
+   "reference_assurance": "PROVED_WITHIN_MODEL",
+   "reference_evidence": [
+    {
+     "class": "COMPILED",
+     "claim": "policy_decide compiles into the cgroup/connect4 BPF object",
+     "status": "pass",
+     "scope": "clang -target bpf -O2 -mcpu=v3; the preprocessed text is plain integer C"
+    },
+    {
+     "class": "PROVED_WITHIN_MODEL",
+     "claim": "for all 2^113 inputs policy_decide equals the contract and has no undefined behaviour",
+     "status": "pass",
+     "scope": "CBMC 5.95.1 (cbmc-5.95.1); C semantics of the BPF-preprocessed text, previously_allowed in {0,1}; loops must finish within 16 iterations"
+    },
+    {
+     "class": "TESTED",
+     "claim": "policy_decide returns the contract's answer",
+     "status": "pass",
+     "scope": "27864 cases on the same text built natively: regression grid, all 1- and 2-bit neighbours of the allowed flow, 20000 fresh random cases"
+    },
+    {
+     "class": "KERNEL_ACCEPTED",
+     "claim": "the kernel verifier loads the cgroup/connect4 program",
+     "status": "pass",
+     "scope": "Linux 7.1.4 x86_64"
+    },
+    {
+     "class": "TESTED",
+     "claim": "the compiled BPF bytecode gives the contract's answer on every case",
+     "status": "pass",
+     "scope": "27864 cases executed by the Linux 7.1.4 BPF runtime (BPF_PROG_TEST_RUN)"
+    },
+    {
+     "class": "TESTED",
+     "claim": "real connect() calls follow the contract with the program attached",
+     "status": "pass",
+     "scope": "192 connect() calls (TCP and UDP, 4 uids) from a cgroup with the program attached, Linux 7.1.4"
+    }
+   ],
+   "reference_checks": {
+    "plain_integer_c": true,
+    "bpf_bytecode_compilation": true,
+    "native_compilation": true,
+    "pure_function": true,
+    "proof_all_inputs": true,
+    "native_semantics": true,
+    "kernel_verifier_accepts": true,
+    "kernel_bytecode_semantics": true,
+    "kernel_connect_semantics": true
+   },
+   "seconds_mean": 0.28,
+   "seconds_max": 0.66,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-uid-bypass.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-protocol-bypass.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-baseline-drop.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-cidr-widening.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m05-proto-truncation.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m06-uid-truncation.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m07-ip-high-byte-mask.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-bitwise-xor.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p02-nested-ifs.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p03-switch-on-port.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "x01-ifdef-bpf-allow-all.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x02-atexit-reward-overwrite.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x03-magic-backdoor.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x04-time-bomb.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "candidate_keeps_state_between_calls"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x05-sizeof-long-double.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x06-bpf-only-needle.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x07-stack-address-needle.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x08-inline-syscalls.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  },
+  "fd-capability-boundary": {
+   "episodes": 80,
+   "correct_accepted": 20,
+   "correct_total": 20,
+   "wrong_rejected": 60,
+   "wrong_total": 60,
+   "reference_assurance": "TESTED",
+   "reference_evidence": [
+    {
+     "class": "TESTED",
+     "claim": "run_worker passes exactly the authorized open file at descriptor 3, keeps the caller's table unchanged, reaps the worker and reports its result",
+     "status": "pass",
+     "scope": "24 real launches on Linux 7.1.4: authorized descriptor at 3, 5, 8, 11, 57 and random numbers, with and without close-on-exec, a decoy at descriptor 3, files, directories, pipes and sockets up to descriptor 900; workers that exit 0, exit non-zero, die from a signal or run slowly while SIGALRM interrupts the caller; a closed authorized descriptor; a missing worker. The worker's table is read inside the exec'ed worker (setuid to a separate uid), the caller's from /proc before and after"
+    }
+   ],
+   "reference_checks": {
+    "compiles": true,
+    "launches": true
+   },
+   "seconds_mean": 0.63,
+   "seconds_max": 2.24,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "descriptors_leaked_into_the_worker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-return-success.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_worker_never_ran"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-leak-other-fds.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "descriptors_leaked_into_the_worker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-break-cloexec.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "descriptor_3_is_not_the_authorized_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-wrong-target-fd.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_worker_never_ran"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m05-ignore-authorized-fd.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "descriptor_3_is_not_the_authorized_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m06-ignore-exit-status.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "success_reported_although_the_worker_failed"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m07-no-eintr-retry.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_worker_was_not_reaped"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m08-parent-dup2-clobber.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_caller_descriptor_changed"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m09-leak-high-fd.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "descriptors_leaked_into_the_worker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-close-range-cloexec.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "p02-walk-proc-self-fd.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "p03-posix-spawn.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "x01-forge-receipt.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_worker_never_ran"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x02-stdout-forge.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "the_caller_died_or_hung_inside_run_worker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  },
+  "probe-design": {
+   "episodes": 60,
+   "correct_accepted": 15,
+   "correct_total": 15,
+   "wrong_rejected": 45,
+   "wrong_total": 45,
+   "reference_assurance": "TESTED",
+   "reference_evidence": [
+    {
+     "class": "TESTED",
+     "claim": "select_probes returns the exact optimum with the stated tie-breaks",
+     "status": "pass",
+     "scope": "318 instances: the 3 original cases, 9 directed edge cases, 306 instances drawn fresh for this episode (up to 14 probes); each compared with an oracle that enumerates every feasible set"
+    }
+   ],
+   "reference_checks": {
+    "solver_runs": true,
+    "exact_optimum": true
+   },
+   "seconds_mean": 0.23,
+   "seconds_max": 0.44,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-select-everything.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-greedy-first.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-ignore-nondeterminism.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-ignore-cost.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m05-bool-and-float-cost.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "malformed_answer"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m06-ignores-max-probes.py": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-bitmask-dp.py": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "p02-branch-and-bound.py": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "TESTED"
+     ]
+    },
+    "x01-import-oracle.py": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x02-reward-daemon.py": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_the_optimum"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  },
+  "quota-overflow-preservation": {
+   "episodes": 90,
+   "correct_accepted": 20,
+   "correct_total": 20,
+   "wrong_rejected": 70,
+   "wrong_total": 70,
+   "reference_assurance": "PROVED_WITHIN_MODEL",
+   "reference_evidence": [
+    {
+     "class": "COMPILED",
+     "claim": "charge compiles into the XDP program and the case runner",
+     "status": "pass",
+     "scope": "clang -target bpf -O2 -mcpu=v3; the preprocessed text is plain integer C"
+    },
+    {
+     "class": "PROVED_WITHIN_MODEL",
+     "claim": "for all 2^192 states and amounts charge returns and leaves exactly what the contract says, with no undefined behaviour",
+     "status": "pass",
+     "scope": "CBMC 5.95.1 (cbmc-5.95.1); C semantics of the BPF-preprocessed text; loops must finish within 16 iterations"
+    },
+    {
+     "class": "TESTED",
+     "claim": "charge returns and leaves the contract's state",
+     "status": "pass",
+     "scope": "34197 cases on the same text built natively: the 13^3 edge grid, both sides of both limits, 20000 fresh random cases"
+    },
+    {
+     "class": "KERNEL_ACCEPTED",
+     "claim": "the kernel verifier loads the XDP program and the case runner",
+     "status": "pass",
+     "scope": "Linux 7.1.4 x86_64"
+    },
+    {
+     "class": "TESTED",
+     "claim": "the compiled BPF bytecode gives the contract's result on every case",
+     "status": "pass",
+     "scope": "34197 cases executed by the Linux 7.1.4 BPF runtime (BPF_PROG_TEST_RUN)"
+    },
+    {
+     "class": "TESTED",
+     "claim": "the XDP program charges a real BPF map value as the contract says",
+     "status": "pass",
+     "scope": "512 test packets through the XDP program, map written and read back, Linux 7.1.4"
+    }
+   ],
+   "reference_checks": {
+    "plain_integer_c": true,
+    "bpf_bytecode_compilation": true,
+    "native_compilation": true,
+    "pure_function": true,
+    "proof_all_inputs": true,
+    "native_semantics": true,
+    "kernel_verifier_accepts": true,
+    "kernel_bytecode_semantics": true,
+    "kernel_map_path": true
+   },
+   "seconds_mean": 0.27,
+   "seconds_max": 0.65,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-total-wrap.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-amount-narrowing.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-partial-mutation.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-zero-rejected.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m05-reject-exact-fit.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m06-saturating-total.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m07-signed-compare.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-subtract-then-check.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p02-null-check-and-helper.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p03-zero-fast-path.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "x01-ifdef-bpf-free-quota.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x02-exit-after-forged-reward.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x03-magic-amount-backdoor.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x04-time-bomb.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "candidate_keeps_state_between_calls"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x05-pointer-address.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x06-sizeof-long-double.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  },
+  "upatch-rpl-predicate": {
+   "episodes": 60,
+   "correct_accepted": 20,
+   "correct_total": 20,
+   "wrong_rejected": 40,
+   "wrong_total": 40,
+   "reference_assurance": "PROVED_WITHIN_MODEL",
+   "reference_evidence": [
+    {
+     "class": "COMPILED",
+     "claim": "rpl_fix_rejects compiles into the fentry detector",
+     "status": "pass",
+     "scope": "clang -target bpf -O2 -mcpu=v3; the preprocessed text is plain integer C"
+    },
+    {
+     "class": "PROVED_WITHIN_MODEL",
+     "claim": "rpl_fix_rejects(n) is 1 exactly when n + 1 > 127, with no undefined behaviour",
+     "status": "pass",
+     "scope": "CBMC 5.95.1 (cbmc-5.95.1); C semantics of the BPF-preprocessed text"
+    },
+    {
+     "class": "PROVED_WITHIN_MODEL",
+     "claim": "the predicate matches the fix for every n",
+     "status": "pass",
+     "scope": "all 256 values of n executed natively: the domain is small enough to enumerate"
+    },
+    {
+     "class": "KERNEL_ACCEPTED",
+     "claim": "the kernel verifier loads the detector, and its fentry program attaches to ipv6_rpl_srh_decompress()",
+     "status": "pass",
+     "scope": "Linux 7.1.4 x86_64; attached, not driven by RPL traffic"
+    },
+    {
+     "class": "TESTED",
+     "claim": "the compiled BPF bytecode gives the fix's answer for every n",
+     "status": "pass",
+     "scope": "all 256 values executed by the Linux 7.1.4 BPF runtime (BPF_PROG_TEST_RUN)"
+    }
+   ],
+   "reference_checks": {
+    "plain_integer_c": true,
+    "bpf_bytecode_compilation": true,
+    "native_compilation": true,
+    "pure_function": true,
+    "proof_all_inputs": true,
+    "all_values_native": true,
+    "kernel_verifier_accepts": true,
+    "kernel_detector_attaches": true,
+    "kernel_bytecode_semantics": true
+   },
+   "seconds_mean": 0.23,
+   "seconds_max": 0.34,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-wraps-at-255.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-old-bound.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-always.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-from-128.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-at-least-127.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p02-header-length.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "p03-top-bits.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "PROVED_WITHIN_MODEL"
+     ]
+    },
+    "x01-ifdef-bpf.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "counterexample_from_model_checker"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x02-counts-calls.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "candidate_keeps_state_between_calls"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "x03-sizeof.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "not_plain_integer_c"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  },
+  "vfs-crash-atomicity": {
+   "episodes": 80,
+   "correct_accepted": 20,
+   "correct_total": 20,
+   "wrong_rejected": 60,
+   "wrong_total": 60,
+   "reference_assurance": "MODEL_CHECKED",
+   "reference_evidence": [
+    {
+     "class": "MODEL_CHECKED",
+     "claim": "every crash point of every schedule leaves the old or the new content, success means durable, and failure only follows an I/O error",
+     "status": "pass",
+     "scope": "382 schedules (3,056 crash points) for payloads of 0-3 bytes: every short write, up to 2 interrupted writes and up to 2 I/O errors at any call; model restricted-vfs-crash-v2 (Linux fsync and rename semantics, documented in vfs_api.h), not a real file system"
+    },
+    {
+     "class": "TESTED",
+     "claim": "the same holds for larger payloads",
+     "status": "pass",
+     "scope": "180 sampled schedules (17,359 crash points) for 39, 1001 and 4096-byte payloads with random chunk sizes, interrupted writes and I/O errors"
+    }
+   ],
+   "reference_checks": {
+    "compiles": true,
+    "only_through_vfs_api": true,
+    "crash_model_exhaustive": true,
+    "crash_model_sampled": true,
+    "deterministic": true
+   },
+   "seconds_mean": 0.54,
+   "seconds_max": 3.9,
+   "isolation": [
+    "uid-separated"
+   ],
+   "candidates": {
+    "oracle": {
+     "kind": "reference",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "MODEL_CHECKED"
+     ]
+    },
+    "starter": {
+     "kind": "starter",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m01-no-file-fsync.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m02-no-directory-fsync.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "success_returned_before_the_rename_was_durable"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m03-skip-partial-write.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m04-return-success-on-fsync-failure.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "success_returned_before_the_rename_was_durable"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m05-fsync-after-close.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "failure_returned_although_no_io_error_happened"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m06-fsync-retry-after-eio.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m07-eintr-restart-from-zero.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m08-eintr-retried-once.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "failure_returned_although_no_io_error_happened"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m09-dir-fsync-retry.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "success_returned_before_the_rename_was_durable"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "m10-remove-recreate-empty.c": {
+     "kind": "honest mistake",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "a_crash_here_leaves_a_torn_or_wrong_file"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    },
+    "p01-close-last.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "MODEL_CHECKED"
+     ]
+    },
+    "p02-retry-with-new-inode.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "MODEL_CHECKED"
+     ]
+    },
+    "p03-ignore-close-error.c": {
+     "kind": "correct alternative",
+     "expected": 1,
+     "rewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "reasons": [],
+     "assurance": [
+      "MODEL_CHECKED"
+     ]
+    },
+    "x01-stdout-forge.c": {
+     "kind": "exploit",
+     "expected": 0,
+     "rewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reasons": [
+      "candidate_calls_outside_itself"
+     ],
+     "assurance": [
+      "REFUTED"
+     ]
+    }
+   }
+  }
+ },
+ "duration_sec": 45.8
+}
