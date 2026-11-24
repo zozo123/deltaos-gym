@@ -3,203 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>DeltaOS Gym: Linux and eBPF coding tasks graded by proofs and kernel tests</title>
-<meta name="description" content="Harbor tasks in which an AI coding agent changes Linux or eBPF code. Graders prove the change with CBMC, model-check it, run it on Linux and inside the kernel, and write a receipt that says which.">
-<meta property="og:title" content="DeltaOS Gym: Linux and eBPF coding tasks graded by proofs and kernel tests">
-<meta property="og:description" content="Harbor tasks in which an AI coding agent changes Linux or eBPF code, with graders that prove, model-check and run the change, and a receipt for every reward.">
-<meta property="og:type" content="article">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4 29 27H3z' fill='none' stroke='%23c2410c' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>DeltaOS Gym · Linux systems tasks</title>
+<meta name="description" content="Six Linux coding tasks with public graders. Read the requirements, run a task with Harbor, and inspect the results.">
+<meta property="og:title" content="DeltaOS Gym · Linux systems tasks">
+<meta property="og:description" content="Six small changes to Linux and eBPF code. Each task states exactly which behavior must hold.">
 <style>
-:root{--bg:#fbfaf7;--fg:#1c1b19;--muted:#6b675f;--rule:#dedad1;--card:#f3f1ea;--code:#efece3;--bad:#b42318;--good:#1f7a4d;--accent:#c2410c;--link:#0b57a4}
-@media (prefers-color-scheme:dark){:root{--bg:#141412;--fg:#e9e6de;--muted:#9c978c;--rule:#33312c;--card:#1d1c19;--code:#22211d;--bad:#ff8a7a;--good:#6fd39b;--accent:#fb923c;--link:#8ab4f8}}
+:root{color-scheme:dark;--bg:#111415;--text:#f0f1ec;--muted:#b2bbb7;--rule:#3b4341;--accent:#a4e8bb;--mono:ui-monospace,Consolas,monospace}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
-main{max-width:46rem;margin:0 auto;padding:3.5rem 1.15rem 5rem}
-h1,h2,h3,.sans,nav,th,figcaption,.stat,.chip{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
-h1{font-size:clamp(2.1rem,6.2vw,3.35rem);line-height:1.05;letter-spacing:-.025em;margin:.2em 0 .45em;font-weight:750}
-h2{font-size:1.5rem;line-height:1.2;letter-spacing:-.012em;margin:3.2rem 0 .8rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
-h3{font-size:1.06rem;margin:2rem 0 .35rem}
-p{margin:.85rem 0}
-a{color:var(--link);text-underline-offset:.15em}
-.kicker{font:600 .8rem/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
-.lede{font-size:1.2rem;line-height:1.5}
-.muted{color:var(--muted)}
-nav{font-size:.92rem;display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;margin:1.4rem 0 0}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.6rem,1fr));gap:.7rem;margin:2rem 0 1rem}
-.stat{background:var(--card);border-radius:.6rem;padding:.95rem 1rem}
-.stat b{display:block;font-size:2rem;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.stat span{display:block;font-size:.84rem;line-height:1.3;color:var(--muted);margin-top:.5rem}
-.stat.bad b{color:var(--bad)}.stat.good b{color:var(--good)}
-pre,code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-code{font-size:.86em;background:var(--code);padding:.08em .32em;border-radius:.25em}
-pre{background:var(--code);padding:.95rem 1.05rem;border-radius:.55rem;overflow-x:auto;font-size:.8rem;line-height:1.5;margin:1rem 0}
-pre code{background:none;padding:0;font-size:inherit}
-figure{margin:1.2rem 0}
-figcaption{font-size:.84rem;color:var(--muted);margin-top:-.35rem}
-figcaption b{color:var(--bad)}
-.wide{overflow-x:auto;margin:1.2rem 0}
-table{border-collapse:collapse;width:100%;font-size:.9rem;font-family:ui-sans-serif,system-ui,sans-serif}
-th,td{text-align:left;padding:.5rem .7rem .5rem 0;border-bottom:1px solid var(--rule);vertical-align:top}
-th{font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.bad{color:var(--bad)}.good{color:var(--good)}
-.chip{display:inline-block;font-size:.7rem;font-weight:650;letter-spacing:.05em;padding:.16rem .45rem;border-radius:.3rem;border:1px solid currentColor;white-space:nowrap}
-ol.ladder{list-style:none;padding:0;margin:1.2rem 0;border-left:2px solid var(--rule)}
-ol.ladder li{padding:.15rem 0 .95rem 1.05rem;position:relative}
-ol.ladder li::before{content:"";position:absolute;left:-.42rem;top:.6rem;width:.7rem;height:.7rem;border-radius:50%;background:var(--good)}
-ol.ladder .chip{color:var(--good);margin-right:.4rem}
-ol.ladder small{display:block;color:var(--muted);font-family:ui-sans-serif,system-ui,sans-serif;font-size:.84rem;line-height:1.4;margin-top:.2rem}
-svg{max-width:100%;height:auto;display:block;margin:1.3rem auto}
-svg text{font-family:ui-sans-serif,system-ui,sans-serif;fill:var(--fg)}
-svg .m{fill:var(--muted)}svg .box{fill:var(--card);stroke:var(--rule)}svg .hot{fill:none;stroke:var(--accent);stroke-width:2}
-svg .arrow{stroke:var(--muted);stroke-width:1.5;fill:none}
-footer{margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--rule);font:.86rem/1.5 ui-sans-serif,system-ui,sans-serif;color:var(--muted)}
-ul{padding-left:1.2rem}li{margin:.3rem 0}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,sans-serif}
+main{max-width:64rem;margin:auto;padding:0 clamp(1.1rem,5vw,4rem) 3rem}
+header,nav,footer{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem 1.4rem}
+header{justify-content:space-between;padding:1.2rem 0;border-bottom:1px solid var(--rule);font: .88rem var(--mono)}
+a{color:var(--accent);text-underline-offset:.23em}
+a:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+header strong{letter-spacing:-.04em}
+h1{font:600 clamp(2.4rem,7vw,4.8rem)/1.03 var(--mono);letter-spacing:-.075em;margin:0}
+.hero{padding:clamp(2.5rem,6vw,5rem) 0 1rem}
+.hero p{max-width:38rem;font-size:1.15rem;color:var(--muted)}
+h2{font:600 1.45rem var(--mono);letter-spacing:-.04em;margin:2.25rem 0 .9rem}
+ul{list-style:none;padding:0;margin:0}
+li{display:grid;grid-template-columns:minmax(12rem,1fr) 2fr;gap:1rem;padding:.85rem 0;border-top:1px solid var(--rule)}
+li:last-child{border-bottom:1px solid var(--rule)}
+li a{font-weight:620}
+li span,footer{color:var(--muted)}
+pre{overflow:auto;background:#1d2321;padding:1rem;border-left:3px solid var(--accent);line-height:1.65}
+code,pre{font-family:var(--mono)}
+footer{margin-top:3rem;border-top:1px solid var(--rule);padding-top:1rem;font:.85rem var(--mono)}
+@media(max-width:620px){li{grid-template-columns:1fr;gap:.2rem}header{align-items:flex-start}pre{font-size:.83rem}}
 </style>
 </head>
-<body>
-<main>
-<p class="kicker">DeltaOS Gym 1.0.0 &middot; Harbor tasks &middot; MIT</p>
-<h1>Six Linux coding tasks</h1>
-<p class="lede">Each task asks you to change one piece of code. The checks show whether your change works and which cases it covers.</p>
-<ol>
-<li><strong>Allow one new connection.</strong> Let one user connect to a specific address and port over TCP. Keep every other allow or deny decision the same.</li>
-<li><strong>Enforce a quota.</strong> Reject a charge if it exceeds the remaining budget or would make the total wrap around. A rejected charge must leave both counters unchanged.</li>
-<li><strong>Detect a kernel bug.</strong> Flag exactly the input values that cause an 8-bit calculation to overflow in Linux’s IPv6 routing code.</li>
-<li><strong>Replace a file safely.</strong> If the machine crashes during an update, readers must find either the complete old file or the complete new one.</li>
-<li><strong>Start a worker with the right file.</strong> Pass the worker only the file handle it is authorized to inherit. Wait for it to finish and report failure if it fails.</li>
-<li><strong>Diagnose a failing service.</strong> Choose the cheapest set of measurements that can tell every possible cause apart within the given limits.</li>
-</ol>
-<p>Each result lists what was tested on Linux and what was proved under a model. The sections below show how earlier checks missed bugs and how the current checks catch them.</p>
-<nav><a href="https://github.com/zozo123/deltaos-gym">Source on GitHub</a><a href="#lies">How the first graders failed</a><a href="#receipt">What a pass means</a><a href="#shirudo">shirudo</a><a href="#numbers">Numbers</a><a href="#run">Run it</a></nav>
-
-<div class="stats">
-<div class="stat good"><b>20 / 20</b><span>planted bugs rejected by the v0.5 graders</span></div>
-<div class="stat bad"><b>27 / 27</b><span>further wrong candidates the same graders accepted</span></div>
-<div class="stat good"><b>0 / 71</b><span>wrong candidates accepted now, in 355 graded runs</span></div>
-<div class="stat good"><b>85 / 85</b><span>runs of correct, differently written solutions accepted</span></div>
-</div>
-<p class="muted sans" style="font-size:.86rem">Measured on Linux 7.1.4 (x86_64). Both tables are in the repository: <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/v05-escape-matrix.json">v0.5 escape matrix</a>, <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/release-report.json">release report</a>.</p>
-
-<h2 id="lies">How the first graders were fooled</h2>
-<p>None of these needed a clever attack. Most are a few lines of C.</p>
-
-<h3>1. It tests one program and ships another</h3>
-<p>The egress task asks for a decision function that lives inside a <code>cgroup/connect4</code> BPF program. The v0.5 grader built the function for x86, ran 26,536 cases against it, then checked that the same file also compiles for BPF.</p>
-<figure><pre><code>int policy_decide(unsigned uid, unsigned ip, unsigned short port,
-                  unsigned proto, unsigned previously_allowed) {
-#if defined(__bpf__)
-    return 1;                       /* what ships: allow everything */
-#else
-    if (previously_allowed) return 1;
-    return uid == 10042U &amp;&amp; ip == 0x0a040209U &amp;&amp; port == 443U &amp;&amp; proto == 6U;
-#endif
-}</code></pre><figcaption>v0.5: all cases pass, BPF compiles, <b>reward 1</b>. Loaded into Linux 7.1.4, that build let through 192 of 192 test connections; the contract allows 2. The verifier loaded all 13 candidates, right and wrong.</figcaption></figure>
-<p>The obvious fix is to preprocess the candidate for the BPF target once and test, prove and compile that one text. It is not enough. <code>sizeof(long double)</code> is 16 on x86-64 and 8 for BPF, so <code>if (sizeof(long double) == 8) return 1;</code> is still two programs, and so is code that compares the address of a local variable with <code>0xff00&hellip;</code>, where kernel stacks live. So the source must now be plain integer C, the part of C on which the two targets agree: no <code>sizeof</code>, no floating point, no addresses, no asm, no builtins. With the kernel tier on, the compiled bytecode also answers every test case inside the kernel.</p>
-
-<h3>2. It lets the candidate into its own process</h3>
-<p>Four of the five graders loaded the candidate with <code>ctypes</code> or let the process hosting it print the verdict.</p>
-<figure><pre><code>int charge(struct budget *state, unsigned long long amount) {
-    int fd = open("/logs/verifier/reward.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    write(fd, "1\n", 2);
-    _exit(0);              /* the grader never gets to write its own verdict */
-}</code></pre><figcaption>v0.5: <b>reward 1</b>. Variants that worked as well: an <code>atexit</code> handler, printing <code>{"passed": true}</code>, a daemon that rewrites the file two milliseconds after the grader exits.</figcaption></figure>
-<p>Candidate code now runs only in a sandbox process. In a verifier container the grader is root and the candidate is another user: it cannot write the verdict directory, cannot read <code>tests/</code>, and everything it started is killed before the verdict is written. Graders compare raw answers with the contract themselves, so there is nothing to print.</p>
-
-<h3>3. It samples where it could prove</h3>
-<figure><pre><code>if (uid == 0xC0FFEE42U &amp;&amp; ip == 0x08080808U &amp;&amp; port == 31337U &amp;&amp; proto == 6U)
-    return 1;              /* one extra flow nobody asked for */</code></pre><figcaption>v0.5: 25,000 random cases, none of them this one. <b>reward 1</b>.</figcaption></figure>
-<p>v0.5's sampler hits that input with probability about 2<sup>-88</sup> per case. A bounded model checker does not guess. CBMC proves the function equal to the contract for all 2<sup>113</sup> inputs, or hands back the input where they differ:</p>
-<pre><code>"counterexample": {
-  "reason": "counterexample_from_model_checker",
-  "witness": {"uid": 3237998146, "ip": 134744072, "port": 31337, "proto": 6, "prior": 0},
-  "expected": 0
-}</code></pre>
-<p>3237998146 is <code>0xC0FFEE42</code>. The proof for the reference takes 0.03 seconds.</p>
-
-<h3>4. Its model of the OS is kinder than the OS</h3>
-<p>The crash-safety task checks <code>publish()</code> against a model of write, fsync, rename and directory fsync. The v0.5 model let you repair a failed <code>fsync</code> by calling it again.</p>
-<figure><pre><code>if (os-&gt;fsync_temp(os-&gt;ctx) &lt; 0 &amp;&amp; os-&gt;fsync_temp(os-&gt;ctx) &lt; 0) goto abort;</code></pre><figcaption>v0.5: <b>reward 1</b>. On Linux the error is reported once and the dirty pages may already be gone; the second call returning 0 proves nothing. PostgreSQL met this in 2018.</figcaption></figure>
-<p>The same model accepted <code>fsync</code> on a closed descriptor, injected <code>EINTR</code> once and only before the first byte, and injected one fault per run. The new model states its rules in the task's header, and the grader explores every schedule of short writes, interruptions and up to two I/O errors for small payloads: 382 schedules for the reference, each checked at every crash point.</p>
-
-<h3>5. It never asks the question it states</h3>
-<p>The descriptor task says: return non-zero when the worker fails, survive a signal during <code>waitpid</code>, pass exactly the authorized descriptor. The v0.5 grader never ran a failing worker and never sent a signal. Its test layout happened to put the right file at descriptor 3 in every case, so a launcher that never looked at its <code>authorized_fd</code> argument passed.</p>
-<p>Five such launchers got full reward. Each requirement now has a case that fails without it, and each task has controls for the other direction too: correct solutions written differently from the reference, which must be accepted. Graded by v0.5, one of the 14 was rejected: a correct launcher built on <code>posix_spawn</code>.</p>
-
-<h2 id="receipt">What a pass means now</h2>
-<p>The reward is still one bit. Next to it the grader writes a receipt that says what the bit rests on, claim by claim. This is the reference solution of the egress task, graded with the kernel tier on:</p>
-<ol class="ladder">
-<li><span class="chip">COMPILED</span>policy_decide compiles into the cgroup/connect4 BPF object<small>clang -target bpf -O2 -mcpu=v3; the preprocessed text is plain integer C</small></li>
-<li><span class="chip">PROVED WITHIN MODEL</span>for all 2^113 inputs policy_decide equals the contract and has no undefined behaviour<small>CBMC 5.95.1 (cbmc-5.95.1); C semantics of the BPF-preprocessed text, previously_allowed in {0,1}; loops must finish within 16 iterations</small></li>
-<li><span class="chip">TESTED</span>policy_decide returns the contract&#x27;s answer<small>27864 cases on the same text built natively: regression grid, all 1- and 2-bit neighbours of the allowed flow, 20000 fresh random cases</small></li>
-<li><span class="chip">KERNEL ACCEPTED</span>the kernel verifier loads the cgroup/connect4 program<small>Linux 7.1.4 x86_64</small></li>
-<li><span class="chip">TESTED</span>the compiled BPF bytecode gives the contract&#x27;s answer on every case<small>27864 cases executed by the Linux 7.1.4 BPF runtime (BPF_PROG_TEST_RUN)</small></li>
-<li><span class="chip">TESTED</span>real connect() calls follow the contract with the program attached<small>192 connect() calls (TCP and UDP, 4 uids) from a cgroup with the program attached, Linux 7.1.4</small></li>
-</ol>
-<p>No class implies another. The kernel verifier accepting a program says it is safe to run, not that it is right. A proof is a statement about CBMC's semantics of C, not about a compiler. The receipt also carries the artifact's SHA-256, the seed that replays the episode's hidden cases, a digest of the grader, and how the candidate was isolated. <a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/evidence.md">Evidence classes</a>, <a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/grader-threat-model.md">what the graders defend against</a>.</p>
-<p>The graders are public. Nothing depends on a secret test set: hidden cases are drawn fresh for every episode, and the strongest tiers do not sample at all.</p>
-
-<h2 id="shirudo">Where this fits: shirudo</h2>
-<p><a href="https://shirudo.dev">shirudo</a> is a new open-source eBPF security platform. A Linux machine runs only the BPF its operator signed, every load is measured into the TPM, and fixes ship as signed micropatches called upatches. Its front page lists agents among the people who will write them.</p>
-<p>Its documentation is exact about where its guarantee ends. Of the signature it says: &ldquo;it shows who built the upatch, not that the upatch is correct.&rdquo; The kernel verifier does not close that gap. A program that drops every packet is perfectly safe.</p>
-<svg viewBox="0 0 720 196" role="img" aria-label="Three questions between a kernel fix and a fleet: is it safe (kernel verifier), who built it and is it on record (shirudo), does it do what the fix requires (this gym).">
-<rect class="box" x="8" y="50" width="200" height="96" rx="10"/><rect class="box" x="260" y="50" width="200" height="96" rx="10"/><rect class="box" x="512" y="50" width="200" height="96" rx="10"/><rect class="hot" x="512" y="50" width="200" height="96" rx="10"/>
-<text x="108" y="84" text-anchor="middle" font-size="15" font-weight="650">Is it safe to run?</text><text class="m" x="108" y="110" text-anchor="middle" font-size="13">kernel verifier</text><text class="m" x="108" y="128" text-anchor="middle" font-size="12">memory, bounds, termination</text>
-<text x="360" y="84" text-anchor="middle" font-size="15" font-weight="650">Who built it? Is it on record?</text><text class="m" x="360" y="110" text-anchor="middle" font-size="13">shirudo</text><text class="m" x="360" y="128" text-anchor="middle" font-size="12">signature, attach site, TPM</text>
-<text x="612" y="84" text-anchor="middle" font-size="15" font-weight="650">Is it right?</text><text class="m" x="612" y="110" text-anchor="middle" font-size="13">this gym</text><text class="m" x="612" y="128" text-anchor="middle" font-size="12">the change, and nothing else</text>
-<text class="m" x="360" y="26" text-anchor="middle" font-size="13">a kernel fix</text><text class="m" x="360" y="184" text-anchor="middle" font-size="13">a fleet that runs it</text>
-<path class="arrow" d="M360 32v12M108 146v10h504v-10M360 156v12"/>
-</svg>
-<p>One task here is taken from shirudo's own tutorial, which turns the fix for an 8-bit overflow in the IPv6 RPL routing code (CVE-2026-63984) into a detector. The agent writes the detector's predicate. The grader runs all 256 argument values natively, proves the same statement with CBMC, loads the <code>fentry</code> program on a real kernel, and evaluates the compiled predicate for all 256 values inside the kernel through a <code>SEC("syscall")</code> test run, the program type shirudo itself uses for upatch self-tests.</p>
-<p>It does not send the packet that triggers the bug. On an unfixed kernel that would corrupt memory, so the evidence for the dangerous branch is enumeration and proof, and the receipt says the hook was attached but not driven. Some properties of a mitigation cannot be tested on the system it protects.</p>
-<p><code>scripts/receipt_gate.py</code> is the small piece that goes in front of a signing key: it exits 0 only if a receipt matches the SHA-256 of the file you are about to sign and carries the evidence classes you require. The gym is independent of shirudo and not affiliated with it. <a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/shirudo.md">More, including what is only a proposal</a>.</p>
-
-<h2 id="numbers">Numbers</h2>
-<div class="wide"><table>
-<thead><tr><th>Task</th><th>Reference evidence</th><th class="n">Wrong rejected</th><th class="n">Correct accepted</th><th class="n">Mean run</th></tr></thead>
-<tbody>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/egress-policy-delta"><code>egress-policy-delta</code></a></td><td><span class="chip good">COMPILED</span> <span class="chip good">PROVED WITHIN MODEL</span> <span class="chip good">TESTED</span> <span class="chip good">KERNEL ACCEPTED</span></td><td class="n">80 / 80</td><td class="n">20 / 20</td><td class="n">0.3 s</td></tr>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/fd-capability-boundary"><code>fd-capability-boundary</code></a></td><td><span class="chip good">TESTED</span></td><td class="n">60 / 60</td><td class="n">20 / 20</td><td class="n">0.6 s</td></tr>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/probe-design"><code>probe-design</code></a></td><td><span class="chip good">TESTED</span></td><td class="n">45 / 45</td><td class="n">15 / 15</td><td class="n">0.2 s</td></tr>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/quota-overflow-preservation"><code>quota-overflow-preservation</code></a></td><td><span class="chip good">COMPILED</span> <span class="chip good">PROVED WITHIN MODEL</span> <span class="chip good">TESTED</span> <span class="chip good">KERNEL ACCEPTED</span></td><td class="n">70 / 70</td><td class="n">20 / 20</td><td class="n">0.3 s</td></tr>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/upatch-rpl-predicate"><code>upatch-rpl-predicate</code></a></td><td><span class="chip good">COMPILED</span> <span class="chip good">PROVED WITHIN MODEL</span> <span class="chip good">KERNEL ACCEPTED</span> <span class="chip good">TESTED</span></td><td class="n">40 / 40</td><td class="n">20 / 20</td><td class="n">0.2 s</td></tr>
-<tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/vfs-crash-atomicity"><code>vfs-crash-atomicity</code></a></td><td><span class="chip good">MODEL CHECKED</span> <span class="chip good">TESTED</span></td><td class="n">60 / 60</td><td class="n">20 / 20</td><td class="n">0.5 s</td></tr>
-</tbody></table></div>
-<p class="muted sans" style="font-size:.86rem">470 graded runs: the reference, the starter and every control of 6 tasks on 5 fresh seeds each, kernel tier on, as root with the candidate under another uid, 46 s in total. 470 receipts validated against the schema. 48 unit tests. gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, Ubuntu clang version 18.1.3 (1ubuntu1), CBMC 5.95.1 (cbmc-5.95.1). The same QA also passes on Linux 7.0, kernel tier on: 282 graded runs, 0 wrong candidates accepted.</p>
-<p>Under <a href="https://github.com/harbor-framework/harbor">Harbor</a> 0.27.0, each task in its own verifier container: the reference agent scores 1.0 and the do-nothing agent 0.0 on all 6 tasks, and <code>harbor lint</code> reports nothing.</p>
-
-
-<h2 id="run">Run it</h2>
-<pre><code>git clone https://github.com/zozo123/deltaos-gym &amp;&amp; cd deltaos-gym
-docker build -t deltaos-dev -f qa/Dockerfile.dev qa
-
-# grade the reference, the starter, and every control of one task
-docker run --rm -v "$PWD":/gym -w /gym deltaos-dev \
-    python3 scripts/run_controls.py egress-policy-delta
-
-# everything, 5 fresh seeds each; add --privileged and --kernel for the kernel tier
-docker run --rm -v "$PWD":/gym -w /gym deltaos-dev python3 scripts/release_qa.py
-
-# as Harbor tasks
-harbor run -p tasks/vfs-crash-atomicity -a oracle</code></pre>
-<p>The graders compile and execute what they are given. Run candidates you did not write only in a container or VM you can throw away, and turn the kernel tier on only there.</p>
-
-<h2 id="limits">Limits</h2>
+<body><main>
+<header><strong>DeltaOS Gym</strong><nav aria-label="Main"><a href="#tasks">Tasks</a><a href="#run">Run</a><a href="#results">Results</a><a href="https://github.com/zozo123/deltaos-gym">GitHub</a></nav></header>
+<section class="hero"><h1>Linux systems tasks</h1>
+<p>Six coding exercises for Linux and eBPF. Each asks for one change and specifies the behavior your code must preserve.</p></section>
+<h2 id="tasks">Tasks</h2>
 <ul>
-<li>Six tasks is a seed, not a benchmark. The graders, their controls and the write-up of how they failed are the contribution.</li>
-<li>The crash model is small and stated. It is not ext4.</li>
-<li>Proofs are within CBMC's semantics of C. Compilers and hardware are outside them.</li>
-<li>Without root there is no second user to run the candidate as. Local runs say so in the receipt.</li>
-<li>Receipts are unsigned.</li>
-<li>Nothing here has run on shirudo's own toolchain. The upatch task loads through libbpf on a stock kernel.</li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/egress-policy-delta/instruction.md">Allow one connection</a><span>Let one user reach a specific address and port over TCP. Preserve every other network rule.</span></li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/quota-overflow-preservation/instruction.md">Enforce a quota</a><span>Reject charges that exceed the budget or overflow the total. A rejected charge must leave both counters unchanged.</span></li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/upatch-rpl-predicate/instruction.md">Detect an overflow</a><span>Flag exactly the inputs that overflow an 8-bit calculation in Linux IPv6 routing code.</span></li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/vfs-crash-atomicity/instruction.md">Replace a file safely</a><span>After a crash, readers must see either the complete old file or the complete new one.</span></li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/fd-capability-boundary/instruction.md">Launch a worker</a><span>Pass only the authorized file handle. Wait for the worker even if a signal interrupts the wait, and report failure if the worker fails.</span></li>
+<li><a href="https://github.com/zozo123/deltaos-gym/blob/main/tasks/probe-design/instruction.md">Diagnose a failing service</a><span>Choose the cheapest set of measurements that distinguishes every possible cause within the budget and probe limit.</span></li>
 </ul>
-
-<footer>
-<p>DeltaOS Gym 1.0.0 &middot; by Yossi Eliaz &middot; MIT &middot; <a href="https://github.com/zozo123/deltaos-gym">github.com/zozo123/deltaos-gym</a> &middot; generated from <code>qa/reports/</code> on 2026-11-24.</p>
-<p>shirudo is a project of its own authors (BSD-2-Clause). The CVE example and the detector's shape come from its tutorial <a href="https://docs.shirudo.dev/upatches/learn/kernel-fix-tutorial.html">From a kernel fix to a upatch</a>.</p>
-</footer>
-</main>
-</body>
-</html>
+<h2 id="run">Run a task</h2>
+<p>With Docker and <a href="https://www.harborframework.com/">Harbor</a> installed, run the reference solution for the file replacement task.</p>
+<pre><code>git clone https://github.com/zozo123/deltaos-gym
+cd deltaos-gym
+harbor run -p tasks/vfs-crash-atomicity -a oracle</code></pre>
+<h2 id="results">Grader results</h2>
+<p>On Linux 7.1.4, the graders rejected all 71 known incorrect solutions across 355 runs. They accepted correct alternative implementations in 85 of 85 runs.</p>
+<p>Each run records which checks passed. Depending on the task, these include Linux tests, simulated crashes, or proofs over a stated model.</p>
+<nav aria-label="Evidence"><a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/release-report.json">Release results</a><a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/evidence.md">How grading works</a></nav>
+<footer>DeltaOS Gym 1.0.0 · Yossi Eliaz · MIT</footer>
+</main></body></html>
