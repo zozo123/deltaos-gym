@@ -1,15 +1,16 @@
 # DeltaOS Gym
 
-A small open benchmark for AI agents that change systems code, and a record of how
-its first graders were fooled. An [islo.dev](https://islo.dev) project.
+Linux and eBPF coding tasks for AI agents, graded by proofs and kernel tests.
 
-Each task hands the agent a piece of real systems code with a defect and a contract:
-change exactly this, keep everything else. A separate verifier decides, and writes a
-receipt that says what its decision rests on.
+Six [Harbor](https://github.com/harbor-framework/harbor) tasks in which a coding agent makes one exact
+change to Linux or eBPF code and leaves everything else as it was. Each grader uses the strongest
+check that fits its task (a CBMC proof over every input, an exhaustive model check of fault
+schedules, real launches on Linux, or the compiled BPF run inside the kernel) and writes a receipt
+that lists each claim and the evidence behind it.
 
-**Read the write-up: https://zozo123.github.io/deltaos-gym/**
+**Write-up: https://zozo123.github.io/deltaos-gym/**
 
-## The short version
+## Why the graders were rewritten
 
 Version 0.5 shipped with 20 planted bugs and rejected all of them. Then 27 more wrong
 candidates were written against it, 14 ordinary mistakes and 13 attempts to get the
@@ -26,8 +27,8 @@ reward without solving the task. **The v0.5 graders gave full reward to all 27**
 - Requirements in the task text (propagate the worker's exit status, survive `EINTR`)
   had no test.
 
-Version 1.0 replaces the graders. Results on a disposable 16-vCPU Linux 7.1.4 VM, as
-root with candidates under another uid, kernel tier on
+Version 1.0 replaces the graders. Results on Linux 7.1.4 (x86_64), as root with
+candidates under another uid, kernel tier on
 ([report](qa/reports/release-report.json)):
 
 | | |
@@ -36,7 +37,7 @@ root with candidates under another uid, kernel tier on
 | Wrong candidates accepted | 0 of 71 (65 negative controls and 6 starters), over 355 graded runs on fresh seeds |
 | Correct, differently written solutions accepted | 85 of 85 runs (17 controls, 5 seeds each) |
 | Receipts valid against the schema | 470 of 470 |
-| The same QA in CI on a GitHub runner | passes on Linux 7.0.0-1014-aws, kernel tier on ([report](qa/reports/ci-github-runner.json)) |
+| The same QA on Linux 7.0 | passes, kernel tier on ([report](qa/reports/release-report-linux-7.0.json)) |
 | Harbor 0.27.0 | reference agent 1.0 and do-nothing agent 0.0 on all 6 tasks, each graded in its own verifier container with the candidate under another uid; `harbor lint` clean ([report](qa/reports/harbor-e2e.json)) |
 
 While the new graders were being built, an independent pass found that preprocessing
@@ -54,7 +55,7 @@ Every number above comes from a file in `qa/reports/`, and each has a script:
 | `v05-escape-matrix.json` | `sh scripts/legacy_escape_matrix.sh > v05.tsv && python3 scripts/escape_matrix_report.py v05.tsv` (uses the original v0.5 graders kept in [`legacy/`](legacy)) |
 | `kernel-demo-egress.json` | `docker run --rm --privileged -v "$PWD":/gym:ro deltaos-dev python3 /gym/qa/kernel_demo.py /gym` |
 | `harbor-e2e.json` | `scripts/harbor_e2e.sh OUT [--public-network] && python3 scripts/harbor_summary.py OUT` |
-| `ci-github-runner.json` | the `release QA` workflow's artifact, on every push |
+| `release-report-linux-7.0.json` | the `release QA` workflow in `.github/workflows/qa.yml` |
 
 The legacy matrix also shows that v0.5 accepted 6 of the 11 wrong candidates written later,
 and rejected one correct solution (a launcher built on `posix_spawn`).
@@ -119,8 +120,7 @@ harbor run -p tasks/vfs-crash-atomicity -a oracle
 ```
 
 The graders compile and execute what they are given. Run candidates you did not write
-only in a sandbox you can throw away, such as an [islo.dev](https://islo.dev) sandbox or
-a disposable VM.
+only in a container or VM you can throw away.
 
 ## Layout
 

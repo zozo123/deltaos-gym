@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>DeltaOS Gym: the grader said yes to all 27 wrong patches</title>
-<meta name="description" content="A small open benchmark for AI agents that change systems code. Its first graders paid full reward for 27 of 27 wrong patches. What was wrong, and what replaced it: sandboxed graders, proofs, real kernel runs, and receipts.">
-<meta property="og:title" content="The grader said yes to all 27 wrong patches">
-<meta property="og:description" content="DeltaOS Gym grades AI-written changes to eBPF policies, crash-safe publishing and descriptor confinement. How its first graders were fooled, and what a pass means now.">
+<title>DeltaOS Gym: Linux and eBPF coding tasks graded by proofs and kernel tests</title>
+<meta name="description" content="Harbor tasks in which an AI coding agent changes Linux or eBPF code. Graders prove the change with CBMC, model-check it, run it on Linux and inside the kernel, and write a receipt that says which.">
+<meta property="og:title" content="DeltaOS Gym: Linux and eBPF coding tasks graded by proofs and kernel tests">
+<meta property="og:description" content="Harbor tasks in which an AI coding agent changes Linux or eBPF code, with graders that prove, model-check and run the change, and a receipt for every reward.">
 <meta property="og:type" content="article">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4 29 27H3z' fill='none' stroke='%23c2410c' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
@@ -61,12 +61,12 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 </head>
 <body>
 <main>
-<p class="kicker">DeltaOS Gym 1.0.0 &middot; an islo.dev project &middot; MIT</p>
-<h1>The grader said yes to all 27 wrong patches.</h1>
-<p class="lede">DeltaOS Gym is a small benchmark for AI agents that change systems code: an eBPF egress policy, overflow-safe accounting in a BPF map, crash-safe file publishing, descriptor confinement across <code>exec</code>, a kernel-bug detector. Each task asks for one exact change and nothing else.</p>
-<p class="lede">Version 0.5 shipped with 20 planted bugs and rejected every one. Then 27 more wrong answers were written against it: 14 ordinary mistakes and 13 attempts to get the reward without doing the work. It paid full reward for all 27.</p>
-<p>This page shows how each one got through, what replaced those graders, and what a pass means now.</p>
-<nav><a href="https://github.com/zozo123/deltaos-gym">Source on GitHub</a><a href="#lies">Five ways a grader says yes</a><a href="#receipt">What a pass means</a><a href="#shirudo">shirudo</a><a href="#numbers">Numbers</a><a href="#run">Run it</a></nav>
+<p class="kicker">DeltaOS Gym 1.0.0 &middot; Harbor tasks &middot; MIT</p>
+<h1>Linux and eBPF coding tasks for AI agents, graded by proofs and kernel tests.</h1>
+<p class="lede">DeltaOS Gym is six <a href="https://github.com/harbor-framework/harbor">Harbor</a> tasks in which a coding agent makes one exact change to Linux or eBPF code and leaves everything else as it was: an egress policy in a <code>cgroup/connect4</code> BPF program, overflow-safe accounting in a BPF map, the predicate of a kernel-bug detector, crash-safe file publishing, descriptor confinement across <code>exec</code>, and the choice of diagnostic probes.</p>
+<p>Each grader uses the strongest check that fits its task: a CBMC proof over every input, an exhaustive model check of fault schedules, real launches on Linux, or the compiled BPF loaded by the kernel verifier and run on every case inside the kernel. Next to the 0/1 reward it writes a receipt that lists each claim and the evidence behind it.</p>
+<p>The graders are tested as well. The first version rejected its 20 planted bugs and gave full reward to 27 of 27 further wrong answers. This page shows how, and what replaced it.</p>
+<nav><a href="https://github.com/zozo123/deltaos-gym">Source on GitHub</a><a href="#lies">How the first graders failed</a><a href="#receipt">What a pass means</a><a href="#shirudo">shirudo</a><a href="#numbers">Numbers</a><a href="#run">Run it</a></nav>
 
 <div class="stats">
 <div class="stat good"><b>20 / 20</b><span>planted bugs rejected by the v0.5 graders</span></div>
@@ -74,9 +74,9 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 <div class="stat good"><b>0 / 71</b><span>wrong candidates accepted now, in 355 graded runs</span></div>
 <div class="stat good"><b>85 / 85</b><span>runs of correct, differently written solutions accepted</span></div>
 </div>
-<p class="muted sans" style="font-size:.86rem">Measured on a disposable 16-vCPU Linux 7.1.4 x86_64 VM. Both tables are in the repository: <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/v05-escape-matrix.json">v0.5 escape matrix</a>, <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/release-report.json">release report</a>.</p>
+<p class="muted sans" style="font-size:.86rem">Measured on Linux 7.1.4 (x86_64). Both tables are in the repository: <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/v05-escape-matrix.json">v0.5 escape matrix</a>, <a href="https://github.com/zozo123/deltaos-gym/blob/main/qa/reports/release-report.json">release report</a>.</p>
 
-<h2 id="lies">Five ways a grader says yes to the wrong thing</h2>
+<h2 id="lies">How the first graders were fooled</h2>
 <p>None of these needed a clever attack. Most are a few lines of C.</p>
 
 <h3>1. It tests one program and ships another</h3>
@@ -134,7 +134,7 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 <p>No class implies another. The kernel verifier accepting a program says it is safe to run, not that it is right. A proof is a statement about CBMC's semantics of C, not about a compiler. The receipt also carries the artifact's SHA-256, the seed that replays the episode's hidden cases, a digest of the grader, and how the candidate was isolated. <a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/evidence.md">Evidence classes</a>, <a href="https://github.com/zozo123/deltaos-gym/blob/main/docs/grader-threat-model.md">what the graders defend against</a>.</p>
 <p>The graders are public. Nothing depends on a secret test set: hidden cases are drawn fresh for every episode, and the strongest tiers do not sample at all.</p>
 
-<h2 id="shirudo">Why this matters now: shirudo</h2>
+<h2 id="shirudo">Where this fits: shirudo</h2>
 <p><a href="https://shirudo.dev">shirudo</a> is a new open-source eBPF security platform. A Linux machine runs only the BPF its operator signed, every load is measured into the TPM, and fixes ship as signed micropatches called upatches. Its front page lists agents among the people who will write them.</p>
 <p>Its documentation is exact about where its guarantee ends. Of the signature it says: &ldquo;it shows who built the upatch, not that the upatch is correct.&rdquo; The kernel verifier does not close that gap. A program that drops every packet is perfectly safe.</p>
 <svg viewBox="0 0 720 196" role="img" aria-label="Three questions between a kernel fix and a fleet: is it safe (kernel verifier), who built it and is it on record (shirudo), does it do what the fix requires (this gym).">
@@ -160,8 +160,8 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 <tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/upatch-rpl-predicate"><code>upatch-rpl-predicate</code></a></td><td><span class="chip good">COMPILED</span> <span class="chip good">PROVED WITHIN MODEL</span> <span class="chip good">KERNEL ACCEPTED</span> <span class="chip good">TESTED</span></td><td class="n">40 / 40</td><td class="n">20 / 20</td><td class="n">0.2 s</td></tr>
 <tr><td><a href="https://github.com/zozo123/deltaos-gym/tree/main/tasks/vfs-crash-atomicity"><code>vfs-crash-atomicity</code></a></td><td><span class="chip good">MODEL CHECKED</span> <span class="chip good">TESTED</span></td><td class="n">60 / 60</td><td class="n">20 / 20</td><td class="n">0.5 s</td></tr>
 </tbody></table></div>
-<p class="muted sans" style="font-size:.86rem">470 graded runs: the reference, the starter and every control of 6 tasks on 5 fresh seeds each, kernel tier on, as root with the candidate under another uid, 46 s in total. 470 receipts validated against the schema. 48 unit tests. gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, Ubuntu clang version 18.1.3 (1ubuntu1), CBMC 5.95.1 (cbmc-5.95.1). The same QA passes in CI on a GitHub runner too: Linux 7.0.0-1014-aws, kernel tier on, 282 graded runs, 0 wrong candidates accepted.</p>
-<p>Under <a href="https://github.com/harbor-framework/harbor">Harbor</a> 0.27.0, each task in its own verifier container: the reference agent scores 1.0 and the do-nothing agent 0.0 on all 6 tasks, and <code>harbor lint</code> reports nothing. Each trial ran with a separate verifier container built from tests/Dockerfile. This machine&#x27;s kernel lacks CONFIG_NFT_FIB_INET, so Harbor&#x27;s Docker backend cannot enforce network_mode = &quot;no-network&quot;; the trials ran on copies of the tasks with network_mode = &quot;public&quot;.</p>
+<p class="muted sans" style="font-size:.86rem">470 graded runs: the reference, the starter and every control of 6 tasks on 5 fresh seeds each, kernel tier on, as root with the candidate under another uid, 46 s in total. 470 receipts validated against the schema. 48 unit tests. gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, Ubuntu clang version 18.1.3 (1ubuntu1), CBMC 5.95.1 (cbmc-5.95.1). The same QA also passes on Linux 7.0, kernel tier on: 282 graded runs, 0 wrong candidates accepted.</p>
+<p>Under <a href="https://github.com/harbor-framework/harbor">Harbor</a> 0.27.0, each task in its own verifier container: the reference agent scores 1.0 and the do-nothing agent 0.0 on all 6 tasks, and <code>harbor lint</code> reports nothing.</p>
 
 
 <h2 id="run">Run it</h2>
@@ -177,7 +177,7 @@ docker run --rm -v "$PWD":/gym -w /gym deltaos-dev python3 scripts/release_qa.py
 
 # as Harbor tasks
 harbor run -p tasks/vfs-crash-atomicity -a oracle</code></pre>
-<p>The graders compile and execute what they are given. Run candidates you did not write in a sandbox you can throw away, such as an <a href="https://islo.dev">islo.dev</a> sandbox or a disposable VM, and turn the kernel tier on only there.</p>
+<p>The graders compile and execute what they are given. Run candidates you did not write only in a container or VM you can throw away, and turn the kernel tier on only there.</p>
 
 <h2 id="limits">Limits</h2>
 <ul>
@@ -190,7 +190,7 @@ harbor run -p tasks/vfs-crash-atomicity -a oracle</code></pre>
 </ul>
 
 <footer>
-<p>DeltaOS Gym 1.0.0 is an <a href="https://islo.dev">islo.dev</a> project, by Yossi Eliaz &middot; MIT &middot; <a href="https://github.com/zozo123/deltaos-gym">github.com/zozo123/deltaos-gym</a> &middot; generated from <code>qa/reports/</code> on 2026-11-24.</p>
+<p>DeltaOS Gym 1.0.0 &middot; by Yossi Eliaz &middot; MIT &middot; <a href="https://github.com/zozo123/deltaos-gym">github.com/zozo123/deltaos-gym</a> &middot; generated from <code>qa/reports/</code> on 2026-11-24.</p>
 <p>shirudo is a project of its own authors (BSD-2-Clause). The CVE example and the detector's shape come from its tutorial <a href="https://docs.shirudo.dev/upatches/learn/kernel-fix-tutorial.html">From a kernel fix to a upatch</a>.</p>
 </footer>
 </main>

@@ -83,10 +83,11 @@ def main() -> int:
                f'{totals["receipts_valid"]} receipts validated against the schema. {units} unit tests. '
                f'{release["environment"]["gcc"]}, {release["environment"]["clang"]}, CBMC {release["environment"]["cbmc"]}.')
 
-    ci = load("ci-github-runner.json")
+    ci = load("release-report-linux-7.0.json")
     if ci and ci.get("passed"):
-        qa_line += (f' The same QA passes in CI on a GitHub runner too: Linux {ci["environment"]["kernel_release"]}, '
-                    f'kernel tier on, {ci["totals"]["episodes"]} graded runs, 0 wrong candidates accepted.')
+        kernel = ".".join(ci["environment"]["kernel_release"].split(".")[:2])
+        qa_line += (f' The same QA also passes on Linux {kernel}, kernel tier on: {ci["totals"]["episodes"]} graded '
+                    f'runs, 0 wrong candidates accepted.')
 
     demo = load("kernel-demo-egress.json")
     ifdef = ""
@@ -105,7 +106,7 @@ def main() -> int:
             harbor_html = (f'<p>Under <a href="https://github.com/harbor-framework/harbor">Harbor</a> '
                            f'{html.escape(harbor["harbor_version"])}, each task in its own verifier container: the '
                            f'reference agent scores 1.0 and the do-nothing agent 0.0 on all {len(harbor["tasks"])} '
-                           f'tasks, and <code>harbor lint</code> reports nothing. {html.escape(harbor.get("note", ""))}</p>')
+                           f'tasks, and <code>harbor lint</code> reports nothing.</p>')
 
     models = load("model-runs.json")
     models_html = ""

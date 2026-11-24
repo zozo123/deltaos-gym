@@ -11,8 +11,8 @@ permissions:
 
 jobs:
   qa:
-    # A GitHub-hosted runner is a VM that is thrown away after the job, which is
-    # what the kernel tier asks for: it loads candidate BPF into the running kernel.
+    # The kernel tier loads candidate BPF into the running kernel, so it runs only on
+    # a machine that is thrown away after the job.
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
