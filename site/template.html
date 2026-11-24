@@ -62,10 +62,17 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 <body>
 <main>
 <p class="kicker">DeltaOS Gym [[VERSION]] &middot; Harbor tasks &middot; MIT</p>
-<h1>Linux and eBPF coding tasks for AI agents, graded by proofs and kernel tests.</h1>
-<p class="lede">DeltaOS Gym is six <a href="https://github.com/harbor-framework/harbor">Harbor</a> tasks in which a coding agent makes one exact change to Linux or eBPF code and leaves everything else as it was: an egress policy in a <code>cgroup/connect4</code> BPF program, overflow-safe accounting in a BPF map, the predicate of a kernel-bug detector, crash-safe file publishing, descriptor confinement across <code>exec</code>, and the choice of diagnostic probes.</p>
-<p>Each grader uses the strongest check that fits its task: a CBMC proof over every input, an exhaustive model check of fault schedules, real launches on Linux, or the compiled BPF loaded by the kernel verifier and run on every case inside the kernel. Next to the 0/1 reward it writes a receipt that lists each claim and the evidence behind it.</p>
-<p>The graders are tested as well. The first version rejected its 20 planted bugs and gave full reward to 27 of 27 further wrong answers. This page shows how, and what replaced it.</p>
+<h1>Six Linux coding tasks</h1>
+<p class="lede">Each task asks you to change one piece of code. The checks show whether your change works and which cases it covers.</p>
+<ol>
+<li><strong>Allow one new connection.</strong> Let one user connect to a specific address and port over TCP. Keep every other allow or deny decision the same.</li>
+<li><strong>Enforce a quota.</strong> Reject a charge if it exceeds the remaining budget or would make the total wrap around. A rejected charge must leave both counters unchanged.</li>
+<li><strong>Detect a kernel bug.</strong> Flag exactly the input values that cause an 8-bit calculation to overflow in Linux’s IPv6 routing code.</li>
+<li><strong>Replace a file safely.</strong> If the machine crashes during an update, readers must find either the complete old file or the complete new one.</li>
+<li><strong>Start a worker with the right file.</strong> Pass the worker only the file handle it is authorized to inherit. Wait for it to finish and report failure if it fails.</li>
+<li><strong>Diagnose a failing service.</strong> Choose the cheapest set of measurements that can tell every possible cause apart within the given limits.</li>
+</ol>
+<p>Each result lists what was tested on Linux and what was proved under a model. The sections below show how earlier checks missed bugs and how the current checks catch them.</p>
 <nav><a href="https://github.com/zozo123/deltaos-gym">Source on GitHub</a><a href="#lies">How the first graders failed</a><a href="#receipt">What a pass means</a><a href="#shirudo">shirudo</a><a href="#numbers">Numbers</a><a href="#run">Run it</a></nav>
 
 <div class="stats">
