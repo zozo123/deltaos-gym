@@ -1,0 +1,27 @@
+schema_version = "1.3"
+artifacts = ["/workspace/solver.py"]
+[task]
+name = "deltaos/probe-design"
+description = "Design minimal-cost cross-layer measurements that provably distinguish possible root causes under uncertain observations."
+authors = []
+keywords = ["linux", "observability", "ebpf", "active-diagnosis", "verification", "optimization"]
+[metadata]
+difficulty = "expert"
+category = "Software"
+tags = ["observability", "minimal-probes", "partial-observability", "counterfactual"]
+[agent]
+timeout_sec = 2700.0
+[verifier]
+timeout_sec = 300.0
+environment_mode = "separate"
+[verifier.environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 2048
+storage_mb = 1024
+[environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 2048
+storage_mb = 1024
+workdir = "/workspace"

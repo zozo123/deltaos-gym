@@ -44,6 +44,21 @@ the candidate once for BPF was not enough: `sizeof(long double)` is 16 on x86-64
 for BPF, so one text can still be two programs. Decision functions must now be plain
 integer C, the part of C on which the two targets agree.
 
+## Reproduce the numbers
+
+Every number above comes from a file in `qa/reports/`, and each has a script:
+
+| Report | How to regenerate (Linux, Docker) |
+|---|---|
+| `release-report.json` | `docker run --rm --privileged -v "$PWD":/gym -w /gym deltaos-dev python3 scripts/release_qa.py --kernel` |
+| `v05-escape-matrix.json` | `sh scripts/legacy_escape_matrix.sh > v05.tsv && python3 scripts/escape_matrix_report.py v05.tsv` (uses the original v0.5 graders kept in [`legacy/`](legacy)) |
+| `kernel-demo-egress.json` | `docker run --rm --privileged -v "$PWD":/gym:ro deltaos-dev python3 /gym/qa/kernel_demo.py /gym` |
+| `harbor-e2e.json` | `scripts/harbor_e2e.sh OUT [--public-network] && python3 scripts/harbor_summary.py OUT` |
+| `ci-github-runner.json` | the `release QA` workflow's artifact, on every push |
+
+The legacy matrix also shows that v0.5 accepted 6 of the 11 wrong candidates written later,
+and rejected one correct solution (a launcher built on `posix_spawn`).
+
 ## What a pass means
 
 The reward is one bit. The receipt lists each claim with the class of evidence behind

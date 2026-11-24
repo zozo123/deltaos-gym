@@ -119,7 +119,7 @@ ul{padding-left:1.2rem}li{margin:.3rem 0}
 
 <h3>5. It never asks the question it states</h3>
 <p>The descriptor task says: return non-zero when the worker fails, survive a signal during <code>waitpid</code>, pass exactly the authorized descriptor. The v0.5 grader never ran a failing worker and never sent a signal. Its test layout happened to put the right file at descriptor 3 in every case, so a launcher that never looked at its <code>authorized_fd</code> argument passed.</p>
-<p>Five such launchers got full reward. Each requirement now has a case that fails without it, and each task has controls for the other direction too: correct solutions written differently from the reference, which must be accepted.</p>
+<p>Five such launchers got full reward. Each requirement now has a case that fails without it, and each task has controls for the other direction too: correct solutions written differently from the reference, which must be accepted. [[V05_FALSE_REJECT]]</p>
 
 <h2 id="receipt">What a pass means now</h2>
 <p>The reward is still one bit. Next to it the grader writes a receipt that says what the bit rests on, claim by claim. This is the reference solution of the egress task, graded with the kernel tier on:</p>

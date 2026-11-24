@@ -1,0 +1,27 @@
+schema_version = "1.3"
+artifacts = ["/workspace/spawn.c"]
+[task]
+name = "deltaos/fd-capability-boundary"
+description = "Preserve one permitted descriptor and remove every other inherited capability across a real Linux fork/exec boundary."
+authors = []
+keywords = ["linux", "fork", "exec", "descriptors", "sandbox", "capability", "cross-language"]
+[metadata]
+difficulty = "expert"
+category = "Software"
+tags = ["fd-tables", "cloexec", "python", "c", "os-internals", "noninterference"]
+[agent]
+timeout_sec = 2700.0
+[verifier]
+timeout_sec = 400.0
+environment_mode = "separate"
+[verifier.environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 2048
+storage_mb = 1024
+[environment]
+network_mode = "no-network"
+cpus = 2
+memory_mb = 2048
+storage_mb = 1024
+workdir = "/workspace"

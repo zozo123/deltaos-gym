@@ -29,6 +29,21 @@ def chips(evidence):
     return " ".join(f'<span class="chip good">{c.replace("_", " ")}</span>' for c in seen)
 
 
+def false_reject_sentence(legacy):
+    """What v0.5 did with the correct alternatives, from the legacy matrix."""
+    rows = [r for r in legacy.get("rows", []) if r.get("kind") == "correct alternative"]
+    rejected = [r for r in rows if r.get("v0.5_reward") == 0]
+    if not rows:
+        return ""
+    if not rejected:
+        return f"v0.5 accepted all {len(rows)} of them."
+    names = {"p03-posix-spawn.c": "a correct launcher built on <code>posix_spawn</code>"}
+    what = ", ".join(names.get(r["candidate"], f"<code>{html.escape(r['candidate'])}</code>") for r in rejected)
+    count = "one" if len(rejected) == 1 else str(len(rejected))
+    verb = "was" if len(rejected) == 1 else "were"
+    return f"Graded by v0.5, {count} of the {len(rows)} {verb} rejected: {what}."
+
+
 def main() -> int:
     release = load("release-report.json")
     legacy = load("v05-escape-matrix.json")
@@ -120,6 +135,7 @@ def main() -> int:
         "VFS_SCHEDULES": schedules.group(1) if schedules else "thousands of",
         "LADDER": ladder, "TASK_ROWS": "\n".join(rows), "QA_LINE": qa_line,
         "HARBOR": harbor_html, "MODELS": models_html,
+        "V05_FALSE_REJECT": false_reject_sentence(legacy),
         "DATE": datetime.date.today().isoformat(),
     }
     page = (ROOT / "site" / "template.html").read_text()

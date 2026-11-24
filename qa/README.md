@@ -21,10 +21,12 @@ python3 scripts/run_controls.py vfs-crash-atomicity --seeds 20
 and control on fresh seeds, validates every receipt, and writes
 `qa/reports/release-report.json`. It exits non-zero if a single expectation breaks.
 
-`qa/reports/v05-escape-matrix.json` is the control set as it stood before the rewrite
-(the 20 shipped mutants and 27 new candidates) graded by the original v0.5 graders
-(`scripts/legacy_escape_matrix.sh`, which needs a copy of the v0.5 release). That run is
-the reason this version exists. `qa/reports/kernel-demo-egress.json` is every egress
+`qa/reports/v05-escape-matrix.json` is every control of the five original tasks graded
+by the original v0.5 graders, kept unchanged in `legacy/v0.5`
+(`scripts/legacy_escape_matrix.sh`, then `scripts/escape_matrix_report.py`). Its summary
+keeps apart the set that existed before the rewrite (20 shipped mutants, 27 new wrong
+candidates: all 27 accepted) and the controls added later. That run is the reason this
+version exists. `qa/reports/kernel-demo-egress.json` is every egress
 candidate of that time loaded into a real kernel (`qa/kernel_demo.py`).
 
 Do not run candidates you did not write on a machine you care about. The graders
