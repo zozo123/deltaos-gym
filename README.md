@@ -36,6 +36,7 @@ root with candidates under another uid, kernel tier on
 | Wrong candidates accepted | 0 of 71 (65 negative controls and 6 starters), over 355 graded runs on fresh seeds |
 | Correct, differently written solutions accepted | 85 of 85 runs (17 controls, 5 seeds each) |
 | Receipts valid against the schema | 470 of 470 |
+| The same QA in CI on a GitHub runner | passes on Linux 7.0.0-1014-aws, kernel tier on ([report](qa/reports/ci-github-runner.json)) |
 | Harbor 0.27.0 | reference agent 1.0 and do-nothing agent 0.0 on all 6 tasks, each graded in its own verifier container with the candidate under another uid; `harbor lint` clean ([report](qa/reports/harbor-e2e.json)) |
 
 While the new graders were being built, an independent pass found that preprocessing

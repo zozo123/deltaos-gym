@@ -68,6 +68,11 @@ def main() -> int:
                f'{totals["receipts_valid"]} receipts validated against the schema. {units} unit tests. '
                f'{release["environment"]["gcc"]}, {release["environment"]["clang"]}, CBMC {release["environment"]["cbmc"]}.')
 
+    ci = load("ci-github-runner.json")
+    if ci and ci.get("passed"):
+        qa_line += (f' The same QA passes in CI on a GitHub runner too: Linux {ci["environment"]["kernel_release"]}, '
+                    f'kernel tier on, {ci["totals"]["episodes"]} graded runs, 0 wrong candidates accepted.')
+
     demo = load("kernel-demo-egress.json")
     ifdef = ""
     if demo:
